@@ -7,16 +7,30 @@
 <div id="boot"><div><div class="dot"></div><p>Opening Kenicmind Hub V9…</p></div></div>
 <script>
 (async()=>{
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  async function getPart(f){
+    let err;
+    for(let attempt=1;attempt<=6;attempt++){
+      try{
+        const r=await fetch('./'+f+'?v=9.1&a='+attempt+'&t='+Date.now(),{cache:'no-store'});
+        if(r.ok)return await r.text();
+        err=new Error(f+' '+r.status);
+      }catch(e){err=e}
+      await sleep(500*attempt);
+    }
+    throw err||new Error(f+' unavailable');
+  }
   try{
-    const files=["v9-1.txt", "v9-2.txt", "v9-3.txt", "v9-4.txt", "v9-5.txt"];
-    const parts=await Promise.all(files.map(f=>fetch('./'+f+'?v=9',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(f+' '+r.status);return r.text()})));
-    const bin=atob(parts.join('').trim()), bytes=new Uint8Array(bin.length);
-    for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+    const files=["v9-1.txt","v9-2.txt","v9-3.txt","v9-4.txt","v9-5.txt"];
+    const parts=[];
+    for(const f of files) parts.push(await getPart(f));
+    const bin=atob(parts.join('').trim()),bytes=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
     const ds=new DecompressionStream('gzip');
     const html=await new Response(new Blob([bytes]).stream().pipeThrough(ds)).text();
     document.open();document.write(html);document.close();
   }catch(e){
-    document.getElementById('boot').innerHTML='<div><h2>Kenicmind Hub V9 could not start</h2><p>Refresh this page in Safari.</p><small>'+String(e)+'</small></div>';
+    document.getElementById('boot').innerHTML='<div><h2>Kenicmind Hub V9 could not start</h2><p>Please tap refresh once. The app will retry automatically.</p><small>'+String(e)+'</small></div>';
   }
 })();
 </script>
