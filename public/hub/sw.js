@@ -1,0 +1,6 @@
+const CACHE='kenicmind-hub-v8-live';
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./','./manifest.webmanifest'])));self.skipWaiting();});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('kenicmind-hub-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const u=new URL(e.request.url);if(u.origin!==self.location.origin)return;if(e.request.mode==='navigate'){e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put('./',copy));return r}).catch(()=>caches.match('./')));}});
+self.addEventListener('push',e=>{let p={title:'Kenicmind Hub',body:'You have an update.',url:'./#home'};try{Object.assign(p,e.data.json())}catch{}e.waitUntil(self.registration.showNotification(p.title,{body:p.body,data:{url:p.url||'./#home'}}));});
+self.addEventListener('notificationclick',e=>{e.notification.close();const url=e.notification.data?.url||'./#home';e.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{const app=list.find(c=>c.url.startsWith(self.registration.scope));if(app){app.navigate(url);return app.focus()}return clients.openWindow(url)}));});
