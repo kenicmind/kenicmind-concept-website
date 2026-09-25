@@ -165,10 +165,11 @@ if('serviceWorker' in navigator && location.protocol==='https:'){navigator.servi
         <button type="button" class="item clickable" data-open="invoice"><div class="iconbox">🧾</div><div class="item-main"><strong>Invoices & Receipts</strong><small>Create professional client documents</small></div><div class="chev">›</div></button>
         <button type="button" class="item clickable" data-open="content"><div class="iconbox">📱</div><div class="item-main"><strong>Content Planner</strong><small>Plan posts, scripts and publishing</small></div><div class="chev">›</div></button>
         <button type="button" class="item clickable" data-open="proof"><div class="iconbox">✅</div><div class="item-main"><strong>Proof Check</strong><small>Compare final artwork with the client WhatsApp brief</small></div><div class="chev">›</div></button>
+        <button type="button" class="item clickable" data-open="assistant"><div class="iconbox">✦</div><div class="item-main"><strong>ChatGPT Scheduler</strong><small>Tell ChatGPT what to schedule and sync it into Hub</small></div><div class="chev">›</div></button>
         <button type="button" class="item clickable" data-open="notifications"><div class="iconbox">🔔</div><div class="item-main"><strong>Notification Centre</strong><small>Morning agenda, jobs, content and payment reminders</small></div><div class="chev">›</div></button>
         <button type="button" class="item clickable" data-open="tools"><div class="iconbox">🛠️</div><div class="item-main"><strong>Quick Tools</strong><small>Resize, compress, QR, WhatsApp and print sizes</small></div><div class="chev">›</div></button>
       </div>
-      <p class="foot-note">Kenicmind Hub V9.1 · Protected data, professional content reader, Proof Check and cloud reminders.</p>
+      <p class="foot-note">Kenicmind Hub V9.2 · ChatGPT Scheduler, protected data, Proof Check and cloud reminders.</p>
     </section>
     <section id="module" class="view module-view" aria-live="polite">
       <button type="button" class="back-link" data-module-back>← Back to More</button>
@@ -2707,7 +2708,7 @@ window.HubNotifications={
   function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(window.__toast); window.__toast=setTimeout(()=>t.classList.remove('show'),2300); }
 
   const allowedViews = ['home','jobs','schedule','clients','more','module'];
-  const moduleNames = new Set(['photography','money','invoice','content','proof','notifications','tools']);
+  const moduleNames = new Set(['photography','money','invoice','content','proof','assistant','notifications','tools']);
   let currentModule = '';
   function navParentFor(view){ return view==='module' ? 'more' : view; }
   function syncNavState(){
@@ -2917,6 +2918,33 @@ window.HubNotifications={
       closeModal();renderAll();setSaveStatus('cloud');toast('Kenicmind Cloud connected.');updateNotificationButton();
     }catch(e){toast(e.message||'Could not sign in.');}
   }
+  let agentRefreshBusy=false;
+  async function refreshAgentCloud(silent=true){
+    if(!HubCloud.isSignedIn()){if(!silent)cloudAuthModal();return false;}
+    if(agentRefreshBusy)return false;
+    agentRefreshBusy=true;
+    try{
+      const beforeMeta=Number(data?._meta?.updatedAt||0);
+      const beforeSchedule=JSON.stringify((data.schedule||[]).map(x=>[x.id,x.title,x.date,x.time,x.endTime,x.location,x.reminder]));
+      const remote=await HubCloud.loadState();
+      if(!remote?.state)return false;
+      data=HubCloud.mergeState(data,remote.state);
+      const afterSchedule=JSON.stringify((data.schedule||[]).map(x=>[x.id,x.title,x.date,x.time,x.endTime,x.location,x.reminder]));
+      const changed=beforeSchedule!==afterSchedule||Number(data?._meta?.updatedAt||0)>beforeMeta;
+      if(changed){
+        await HubRepository.save(data);
+        lastSaved=JSON.stringify(data);
+        renderAll();
+        setSaveStatus('cloud');
+        if(!silent)toast('ChatGPT schedule synced.');
+      }else if(!silent)toast('Schedule is already up to date.');
+      return changed;
+    }catch(e){
+      console.warn('ChatGPT schedule sync',e);
+      if(!silent)toast('Could not refresh from cloud: '+e.message);
+      return false;
+    }finally{agentRefreshBusy=false;}
+  }
   async function syncCloudNow(){
     if(!HubCloud.isSignedIn())return cloudAuthModal();
     try{const remote=await HubCloud.loadState();if(remote?.state)data=HubCloud.mergeState(data,remote.state);await HubRepository.save(data);await HubCloud.flushState(data);lastSaved=JSON.stringify(data);renderAll();setSaveStatus('cloud');toast('Cloud sync complete.');}
@@ -3039,6 +3067,11 @@ window.HubNotifications={
       proofModule(proofJobId,{updateHash});
       return;
     }
+    if(name==='assistant'){
+      const connected=HubCloud.isSignedIn();
+      showModulePage(name,'ChatGPT Scheduler','ChatGPT can write schedule items directly into your Kenicmind Hub cloud schedule.',`<div class="module-note"><strong>${connected?'✅ Connected to Kenicmind Cloud':'⚠️ Sign in on this device'}</strong><br>${connected?'Anything I add from ChatGPT can sync into this app automatically.':'ChatGPT can add items to your cloud account, but this device must be signed in to pull them into the app.'}</div><div class="reader-section"><h3>How to use it</h3><div class="reader-copy"><p>Just tell ChatGPT naturally what you want scheduled.</p><p><strong>Example:</strong> “Schedule Digital Marketing class tomorrow 10am at AHSED. Remind me 1 hour before.”</p><p><strong>Example:</strong> “Add photography for Saturday 2pm, client Emeka, remind me that morning.”</p><p><strong>Example:</strong> “Move my 4pm appointment to 5:30pm.”</p></div></div><div class="reader-section"><h3>What gets added</h3><div class="check-list"><div class="check-item"><span class="check-box">✓</span><span>Title and schedule type</span></div><div class="check-item"><span class="check-box">✓</span><span>Date, start time and end time when provided</span></div><div class="check-item"><span class="check-box">✓</span><span>Location and notes</span></div><div class="check-item"><span class="check-box">✓</span><span>Hub reminder setting</span></div></div></div><div class="sheet-actions"><button type="button" class="primary" data-agent-refresh>Refresh from ChatGPT</button>${connected?'':'<button type="button" class="secondary" data-cloud-login>Sign in to Cloud</button>'}</div><p class="hint">New ChatGPT items are checked automatically when you reopen Hub or return to it. You can also use Refresh from ChatGPT.</p>`,{updateHash});
+      return;
+    }
     if(name==='notifications'){
       showModulePage(name,'Notification Centre','Background alerts, reminder preferences and the reminders you may have missed.',`<div id="notificationCentreBody"><div class="empty">Loading notifications…</div></div>`,{updateHash});
       setTimeout(loadNotificationCentre,0);
@@ -3134,6 +3167,7 @@ window.HubNotifications={
     if('cloudLogin'in d)cloudAuthModal();
     if('cloudAuthSubmit'in d)await cloudAuthSubmit();
     if('cloudSync'in d)await syncCloudNow();
+    if('agentRefresh'in d)await refreshAgentCloud(false);
     if('cloudSignout'in d){await HubCloud.signOut();closeModal();renderAll();setSaveStatus('device');updateNotificationButton();toast('Signed out. Local Hub data stays on this device.');}
     if('enablePush'in d)await enableNotifications();
     if('saveNotificationPrefs'in d)await saveNotificationPrefs();
@@ -3152,7 +3186,7 @@ window.HubNotifications={
     if('exportBackup'in d)download(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),'kenicmind-backup-'+todayISO()+'.json');
     if('importBackup'in d)$('#backupFile').click();
   });
-  document.querySelector('.quick').insertAdjacentHTML('beforeend','<button data-new-transaction><span class="ic">↗</span><small>Income / Expense</small></button><button data-open="photography"><span class="ic">◉</span><small>Photography</small></button>');
+  document.querySelector('.quick').insertAdjacentHTML('beforeend','<button data-new-transaction><span class="ic">↗</span><small>Income / Expense</small></button><button data-open="photography"><span class="ic">◉</span><small>Photography</small></button><button data-open="assistant"><span class="ic">✦</span><small>ChatGPT</small></button>');
   document.querySelectorAll('.mini-add').forEach(b=>b.setAttribute('aria-label',b.dataset.action.replace('new-','Add ')));
   $('#jobSearch').setAttribute('aria-label','Search jobs');$('#clientSearch').setAttribute('aria-label','Search clients');
   document.querySelector('.notification-card small').textContent='Morning agenda, schedules, deadlines, content and payment alerts — even when Hub is closed.';
@@ -3223,7 +3257,10 @@ window.HubNotifications={
 
   $('#profileButton').addEventListener('click',()=>openModule('settings'));
   $('#notificationCenterButton').addEventListener('click',()=>openModule('notifications'));
-  window.addEventListener('hub-auth-changed',()=>{updateNotificationButton();refreshNotificationBadge(true);});
+  window.addEventListener('hub-auth-changed',()=>{updateNotificationButton();refreshNotificationBadge(true);refreshAgentCloud(true);});
+  window.addEventListener('focus',()=>refreshAgentCloud(true));
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshAgentCloud(true);});
+  setInterval(()=>{if(!document.hidden)refreshAgentCloud(true);},60000);
   window.addEventListener('message',async e=>{
     if(!invoiceFrame||e.source!==invoiceFrame.contentWindow)return;
     const m=e.data||{};
