@@ -1,21 +1,1000 @@
-<!doctype html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#09080d">
-<title>Kenicmind Hub</title>
-<style>html,body{margin:0;background:#09080d;color:#fff;font-family:system-ui}#boot{min-height:100vh;display:grid;place-items:center;padding:24px;text-align:center}.dot{width:44px;height:44px;border:4px solid #302440;border-top-color:#ffc84a;border-radius:50%;animation:s .8s linear infinite;margin:auto}@keyframes s{to{transform:rotate(360deg)}}</style>
-<div id="boot"><div><div class="dot"></div><p>Opening Kenicmind Hub…</p></div></div>
-<script>
-(async()=>{
- try{
-  const files=['live1.txt','live2.txt','live3.txt','live4.txt'];
-  const parts=await Promise.all(files.map(f=>fetch('./'+f,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(f+' '+r.status);return r.text()})));
-  const bin=atob(parts.join('').trim()), bytes=new Uint8Array(bin.length);
-  for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
-  const html=new TextDecoder().decode(bytes);
-  document.open();document.write(html);document.close();
- }catch(e){
-  document.getElementById('boot').innerHTML='<div><h2>Kenicmind Hub could not start</h2><p>Refresh this page in Safari.</p><small>'+String(e)+'</small></div>';
- }
-})();
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0810" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Kenicmind Hub" />
+  <style>
+:root{--bg:#09090d;--panel:#111118;--panel2:#171721;--line:#272735;--text:#f7f5fb;--muted:#9a97a8;--purple:#7c3cff;--purple2:#a65cff;--gold:#f2b94b;--green:#2cd38a;--red:#ff5d6c;--blue:#4a8cff;--shadow:0 16px 40px rgba(0,0,0,.35)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 85% -10%,rgba(124,60,255,.22),transparent 28%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}button,input,select,textarea{font:inherit}button,a{cursor:pointer}.app-shell{max-width:460px;margin:0 auto;min-height:100vh;padding:env(safe-area-inset-top) 16px calc(92px + env(safe-area-inset-bottom));position:relative}.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 2px 10px;position:sticky;top:0;z-index:20;background:linear-gradient(to bottom,rgba(9,9,13,.97) 75%,rgba(9,9,13,0))}.brand{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none}.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--gold),#ffdd82);display:grid;place-items:center;color:#151006;font-weight:900;letter-spacing:-1px;box-shadow:0 10px 22px rgba(242,185,75,.2)}.brand small{display:block;color:var(--muted);font-size:11px}.brand strong{font-size:15px}.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(145deg,#4e2c15,#b96f38);display:grid;place-items:center;font-weight:800;border:2px solid #282431;color:#fff}.hero{padding:15px 2px 12px}.hero p{color:var(--muted);margin:0 0 4px;font-size:13px}.hero h1{margin:0;font-size:28px;line-height:1.1}.hero .sub{margin-top:6px;font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.card{background:linear-gradient(180deg,rgba(24,24,34,.96),rgba(16,16,23,.96));border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--shadow);color:inherit;text-decoration:none;text-align:left}.card.wide{grid-column:1/-1}.clickable{transition:.16s ease}.clickable:active{transform:scale(.985);border-color:#51446c}.metric-card{min-height:86px;width:100%}.metric-title{font-size:11px;color:var(--muted)}.metric-value{font-size:22px;font-weight:800;margin-top:5px}.split{display:flex;justify-content:space-between;align-items:start}.badge{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:700}.green{background:rgba(44,211,138,.14);color:#6ce5ae}.orange{background:rgba(242,185,75,.14);color:#ffd47b}.blue{background:rgba(74,140,255,.15);color:#84b0ff}.red{background:rgba(255,93,108,.14);color:#ff8994}.purple{background:rgba(124,60,255,.16);color:#b390ff}.primary{width:100%;border:0;border-radius:14px;padding:14px 16px;background:linear-gradient(90deg,#6d31ff,#8e47ff);color:#fff;font-weight:800;box-shadow:0 10px 24px rgba(124,60,255,.22)}.primary:active,.secondary:active,.mini-add:active{transform:scale(.98)}.big-action{margin-top:12px}.secondary{border:1px solid var(--line);background:#15151f;color:#fff;border-radius:12px;padding:11px 13px;font-weight:700}.danger-btn{border:1px solid rgba(255,93,108,.35);background:rgba(255,93,108,.08);color:#ff9ca5;border-radius:12px;padding:11px 13px;font-weight:700}.section-head{display:flex;align-items:center;justify-content:space-between;margin:22px 2px 10px}.section-head h2{font-size:16px;margin:0}.section-head a,.section-head button{background:none;border:0;color:#ad91ff;font-size:12px;text-decoration:none}.agenda{display:flex;gap:12px;align-items:flex-start}.time{min-width:56px;color:#c9c3d6;font-size:12px;padding-top:2px}.agenda-content{flex:1}.agenda-content strong{font-size:13px;display:block}.agenda-content small{color:var(--muted);font-size:11px}.agenda-line{height:1px;background:#242430;margin:12px 0}.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.quick button{background:#15151e;border:1px solid var(--line);border-radius:14px;padding:12px 4px;color:#fff}.quick button:active{transform:scale(.97)}.quick .ic{display:block;font-size:21px;margin-bottom:4px}.quick small{font-size:9px;color:#c7c3cf}.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;z-index:30;width:min(460px,100%);background:rgba(13,13,19,.96);backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:8px 10px calc(9px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr)}.nav a{border:0;background:none;color:#777484;padding:6px 2px 5px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;text-decoration:none;border-radius:13px;transition:.16s ease;position:relative}.nav .nav-ic{font-size:19px;min-width:34px;height:28px;display:grid;place-items:center;border-radius:10px;transition:.16s ease}.nav a.active{color:var(--gold);font-weight:800}.nav a.active .nav-ic{background:linear-gradient(135deg,var(--gold),#ffd875);color:#181107;box-shadow:0 6px 18px rgba(242,185,75,.24)}.nav a.active:after{content:'';position:absolute;bottom:0;width:18px;height:2px;border-radius:99px;background:var(--gold)}.view{display:none}.view.active{display:block}.toolbar{display:flex;gap:8px;margin:14px 0}.search{flex:1;background:#12121a;border:1px solid var(--line);border-radius:12px;padding:12px 13px;color:#fff;outline:none}.search:focus{border-color:#6e4a9d}.pill-row{display:flex;gap:7px;overflow:auto;padding:3px 0 10px;scrollbar-width:none}.pill-row::-webkit-scrollbar{display:none}.pill{white-space:nowrap;border:1px solid var(--line);background:#14141d;color:#aaa6b5;border-radius:999px;padding:7px 12px;font-size:11px}.pill.active{background:#6d31ff;color:#fff;border-color:#6d31ff}.list{display:flex;flex-direction:column;gap:9px}.item{width:100%;background:#12121a;border:1px solid var(--line);border-radius:15px;padding:13px;display:flex;align-items:center;gap:11px;color:inherit;text-align:left}.item .iconbox{width:42px;height:42px;border-radius:11px;background:#222230;display:grid;place-items:center;font-size:20px;flex:0 0 auto}.item-main{min-width:0;flex:1}.item-main strong{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item-main small{color:var(--muted);font-size:10px}.amount{text-align:right;font-size:12px;font-weight:800}.amount small{display:block;margin-top:4px;font-weight:600}.chev{font-size:25px;color:#777286}.fab{position:fixed;right:max(18px,calc((100vw - 460px)/2 + 18px));bottom:88px;width:54px;height:54px;border-radius:50%;border:0;background:linear-gradient(145deg,#7a39ff,#9e57ff);color:white;font-size:27px;box-shadow:0 14px 35px rgba(124,60,255,.38);z-index:25}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:99;display:none;align-items:flex-end;justify-content:center}.modal.open{display:flex}.sheet{width:min(460px,100%);max-height:90vh;overflow:auto;background:#101017;border:1px solid #292938;border-bottom:0;border-radius:24px 24px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom));animation:up .22s ease;position:relative}.grab{width:42px;height:4px;background:#3b3946;border-radius:6px;margin:0 auto 15px}.close-x{position:absolute;right:14px;top:12px;width:34px;height:34px;border-radius:50%;border:1px solid #292938;background:#171720;color:#c8c4d0;font-size:22px}@keyframes up{from{transform:translateY(16px);opacity:.6}to{transform:none;opacity:1}}.sheet h3{margin:0 42px 15px 0}.field{margin-bottom:12px}.field label{font-size:11px;color:#aba7b5;display:block;margin:0 0 6px}.field input,.field select,.field textarea{width:100%;background:#0c0c12;border:1px solid #30303d;border-radius:12px;padding:12px;color:#fff;outline:none}.field textarea{resize:vertical;min-height:78px}.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sheet-actions{display:flex;gap:9px;margin-top:8px}.sheet-actions>*{flex:1}.calendar-card{margin-top:8px}.calendar-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.calendar-title small{font-size:9px;color:var(--muted)}.calendar-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.day{border:1px solid var(--line);border-radius:12px;text-align:center;padding:9px 1px;background:#12121a}.day span{display:block;font-size:9px;color:var(--muted)}.day strong{font-size:13px}.day.today{border-color:#7c3cff;background:rgba(124,60,255,.12)}.day.has-event:after{content:'';width:5px;height:5px;background:var(--gold);display:block;margin:5px auto 0;border-radius:50%}.notification-card{display:flex;align-items:center;gap:12px}.notification-card .bell{width:42px;height:42px;border-radius:14px;background:rgba(242,185,75,.14);display:grid;place-items:center;font-size:22px;flex:0 0 auto}.notification-card strong{font-size:13px}.notification-card small{color:var(--muted);font-size:10px;display:block;margin-top:2px}.notification-card button{margin-left:auto;background:#242032;border:1px solid #332b48;color:#c8b6ff;border-radius:10px;padding:9px 10px;font-size:10px;font-weight:700}.empty{text-align:center;color:var(--muted);padding:28px 10px;font-size:12px}.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px;background:var(--green)}.money-bar{height:8px;background:#252532;border-radius:99px;overflow:hidden;margin-top:10px}.money-bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#6d31ff,#b278ff);border-radius:99px}.foot-note{font-size:10px;color:#747181;text-align:center;margin-top:20px}.page-head{display:flex;justify-content:space-between;align-items:flex-start;padding:18px 2px 4px}.page-head h1{margin:2px 0 4px;font-size:27px}.page-head p{margin:0;color:var(--muted);font-size:11px;max-width:310px}.eyebrow{font-size:9px;letter-spacing:1.6px;color:#9b77ff;font-weight:800}.mini-add{width:42px;height:42px;border:0;border-radius:13px;background:#7136ef;color:#fff;font-size:22px}.toast{position:fixed;left:50%;bottom:96px;transform:translate(-50%,12px);background:#23232e;border:1px solid #363648;color:#fff;border-radius:12px;padding:11px 14px;font-size:11px;z-index:120;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap;max-width:calc(100vw - 36px);overflow:hidden;text-overflow:ellipsis}.toast.show{opacity:1;transform:translate(-50%,0)}.detail-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.detail-kpis .mini{background:#171720;border:1px solid #292938;border-radius:12px;padding:10px}.detail-kpis small{display:block;color:var(--muted);font-size:9px}.detail-kpis strong{font-size:12px;display:block;margin-top:4px}.call-actions{display:flex;gap:8px;margin:10px 0}.call-actions a{flex:1;text-align:center;padding:11px;border-radius:12px;background:#191923;border:1px solid #2c2c39;color:#fff;text-decoration:none;font-size:11px;font-weight:700}.module-note{background:rgba(124,60,255,.08);border:1px solid rgba(124,60,255,.24);padding:11px;border-radius:12px;color:#c7b7ee;font-size:10px;line-height:1.5}.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.tool-tile{border:1px solid var(--line);background:#15151e;color:#fff;border-radius:14px;padding:14px;text-align:left}.tool-tile strong{font-size:12px}.tool-tile small{display:block;color:var(--muted);font-size:9px;margin-top:4px}.invoice-preview{background:#fff;color:#151515;border-radius:12px;padding:16px;margin-top:12px}.invoice-preview h4{margin:0 0 4px}.invoice-preview small{color:#666}.invoice-line{display:flex;justify-content:space-between;border-top:1px solid #ddd;padding-top:9px;margin-top:9px;font-size:12px}
+@media (min-width:700px){body{padding:24px 0}.app-shell{border:1px solid #262632;border-radius:28px;overflow:hidden;min-height:calc(100vh - 48px);box-shadow:0 25px 70px rgba(0,0,0,.35)}.nav{bottom:24px;border-radius:0 0 28px 28px}.fab{bottom:110px}}
+/* No-JS fallback: anchor navigation still works. */
+body:not(.js-ready) .view{display:none}body:not(.js-ready) #home{display:block}body:not(.js-ready) .view:target{display:block}body:not(.js-ready):has(.view:target) #home:not(:target){display:none}
+
+  /* V5 refinement: preserve the clean shell, improve touch targets and active states. */
+:root{--bg:#0b0812;--panel:#16111f;--line:#2c243a;--muted:#b1a7c0;--purple:#9758ff}
+body{line-height:1.5;background:radial-gradient(ellipse at 70% 0,#251337 0,transparent 45%),var(--bg)}
+.app-shell{max-width:600px;padding-left:20px;padding-right:20px}.nav{width:min(600px,100%)}
+.hero{padding:26px 0 22px}.hero h1{font-size:32px;letter-spacing:-1px}.hero p,.hero .sub{font-size:14px}.hero h1{line-height:1.3}
+.card{padding:18px;border-radius:22px;box-shadow:none;background:linear-gradient(145deg,#21172e,#15101e)}
+.metrics-grid{gap:12px}.metrics-grid .wide{background:linear-gradient(120deg,#462279,#291740);border-color:#7546a7;padding:22px}.metric-title{font-size:14px}.metric-value{font-size:26px;letter-spacing:-.5px;overflow-wrap:anywhere}.metrics-grid .wide .metric-value{font-size:36px}.money-bar{display:none}
+button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button{min-height:44px}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.brand small,.foot-note,.badge,.nav a,.quick small{font-size:12px}.brand strong{font-size:16px}.avatar{width:44px;height:44px;background:#382048;border:1px solid #7642a3}.logo{box-shadow:none}
+.nav a{min-height:52px;color:#b0a4bc}.nav a.active{background:rgba(242,185,75,.10);border-radius:14px;color:#f2b94b}.nav .nav-ic{font-size:23px;line-height:1.1}
+.page-head p,.item-main small,.amount,.field label,.section-head a,.section-head button,.agenda-content small,.time,.calendar-title small,.notification-card small,.tool-tile small,.module-note,.call-actions a,.detail-kpis small{font-size:14px}
+.item-main strong,.agenda-content strong,.notification-card strong,.tool-tile strong{font-size:16px;white-space:normal;overflow-wrap:anywhere}.item{padding:16px;border-radius:18px;gap:12px}.item .iconbox{width:36px;height:40px;font-size:18px}.amount{max-width:36%;overflow-wrap:anywhere}.amount small{font-size:12px}.list{gap:12px}.item-main{line-height:1.5}
+.quick{grid-template-columns:repeat(3,1fr);gap:10px}.quick button{padding:14px 4px}.quick small{font-size:13px}.section-head{margin-top:26px}.section-head h2{font-size:18px}
+.search{min-width:0;width:100%;font-size:16px}.pill{font-size:14px}.field input,.field select,.field textarea{font-size:16px;min-width:0;min-height:48px}.field label{margin-bottom:7px}.field{margin-bottom:16px}.sheet{width:min(600px,100%);max-height:92dvh;padding:22px 20px calc(28px + env(safe-area-inset-bottom));overscroll-behavior:contain}.sheet h3{font-size:22px}.sheet-actions{flex-wrap:wrap}.sheet-actions>*{min-width:110px}.detail-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.detail-kpis strong{font-size:15px;overflow-wrap:anywhere}.detail-kpis .mini{padding:12px 8px}.close-x{width:44px;height:44px}.toast{font-size:14px;white-space:normal;text-align:center}.empty{font-size:15px;padding:26px 14px}.notification-card{flex-wrap:wrap}.notification-card>div:nth-child(2){flex:1;min-width:140px}.notification-card button{font-size:14px}.calendar-strip{gap:4px}.day{color:var(--text);min-width:0}.day span{font-size:12px}.day strong{font-size:16px}.day.selected{background:#6732b8;border-color:#ad77fb}.calendar-title strong{font-size:15px}.toolbar{align-items:center}.calendar-card{padding:12px}.agenda-content{min-width:0}.time{min-width:66px}.module-note{line-height:1.7}.tool-grid{gap:12px}.tool-tile{min-height:90px}.invoice-preview{padding:24px;line-height:1.8}.invoice-line{gap:20px;font-size:14px}.invoice-line span{overflow-wrap:anywhere}.invoice-preview h4{font-size:28px;color:#6432a0}.receipt-meta{font-size:13px}.hint{font-size:13px;color:var(--muted)}.error-box{border:1px solid #ff5d6c;padding:18px}.preview-image{max-width:100%;border-radius:12px;margin-top:14px}
+@media(min-width:700px){.app-shell{min-height:calc(100vh - 48px)}.modal{align-items:center}.sheet{border-radius:24px;border-bottom:1px solid var(--line)}}
+@media(max-width:360px){.app-shell{padding-left:12px;padding-right:12px}.metric-value{font-size:23px}.row2{grid-template-columns:1fr}.item .iconbox{display:none}.detail-kpis{gap:4px}.sheet{padding-left:14px;padding-right:14px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media print{body{background:white!important}.app-shell,.close-x,.grab,.sheet-actions,.toast,#modalBody>h3,#modalBody>.field,#modalBody>button{display:none!important}.modal{position:static;display:block!important;background:white}.sheet{max-height:none;overflow:visible;width:100%;border:0;background:white}.invoice-preview{margin:0;padding:0}#invoicePreview~*{display:none}}
+
+.content-schedule-row{border-color:rgba(242,185,75,.22)}.content-schedule-row .iconbox{background:rgba(242,185,75,.10)}
+
+/* V6 touch/click hardening */
+html{-webkit-text-size-adjust:100%}body{-webkit-tap-highlight-color:transparent}button,a,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:transparent}.nav{z-index:80;pointer-events:auto}.nav a{pointer-events:auto;min-height:56px;user-select:none;-webkit-user-select:none}.nav a:active .nav-ic{transform:scale(.92)}.nav a:focus-visible,.quick button:focus-visible,.item:focus-visible,.tool-tile:focus-visible,.card.clickable:focus-visible{outline:2px solid var(--gold);outline-offset:2px}.menu-list .item,.quick button,.tool-tile,.metric-card{position:relative;z-index:1}.menu-list .item:active,.tool-tile:active{transform:scale(.985);border-color:var(--gold)}
+
+/* V7 interaction + navigation fixes */
+body[data-nav="home"] .nav [data-view="home"],
+body[data-nav="jobs"] .nav [data-view="jobs"],
+body[data-nav="schedule"] .nav [data-view="schedule"],
+body[data-nav="clients"] .nav [data-view="clients"],
+body[data-nav="more"] .nav [data-view="more"]{color:var(--gold);font-weight:800;background:rgba(242,185,75,.10);border-radius:14px}
+body[data-nav="home"] .nav [data-view="home"] .nav-ic,
+body[data-nav="jobs"] .nav [data-view="jobs"] .nav-ic,
+body[data-nav="schedule"] .nav [data-view="schedule"] .nav-ic,
+body[data-nav="clients"] .nav [data-view="clients"] .nav-ic,
+body[data-nav="more"] .nav [data-view="more"] .nav-ic{background:linear-gradient(135deg,var(--gold),#ffd875);color:#181107;box-shadow:0 6px 18px rgba(242,185,75,.24)}
+body[data-nav="home"] .nav [data-view="home"]:after,
+body[data-nav="jobs"] .nav [data-view="jobs"]:after,
+body[data-nav="schedule"] .nav [data-view="schedule"]:after,
+body[data-nav="clients"] .nav [data-view="clients"]:after,
+body[data-nav="more"] .nav [data-view="more"]:after{content:'';position:absolute;bottom:0;width:18px;height:2px;border-radius:99px;background:var(--gold)}
+.nav a.active{color:inherit;font-weight:inherit;background:transparent}
+.nav a.active .nav-ic{background:transparent;color:inherit;box-shadow:none}
+.nav a.active:after{content:none}
+
+.menu-list .item{min-height:82px}.menu-list .item,.quick button,.metric-card,.section-head a,.section-head button,.back-link{touch-action:manipulation}
+.menu-list .item:active,.quick button:active,.metric-card:active{filter:brightness(1.12)}
+.module-view{padding-bottom:18px}.module-head{padding-top:4px}.back-link{border:0;background:none;color:var(--gold);font-weight:800;font-size:14px;padding:14px 2px 4px}.module-view .primary{margin-top:8px}.module-view .list{margin-top:10px}.module-view .field{margin-top:10px}
+
+.schedule-summary{margin:8px 0 14px}.schedule-summary .summary-card{background:linear-gradient(135deg,rgba(124,60,255,.16),rgba(242,185,75,.08));border:1px solid rgba(164,113,255,.35);border-radius:18px;padding:16px}.summary-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.summary-top strong{font-size:15px}.summary-count{font-size:12px;color:#ffd47b;background:rgba(242,185,75,.12);padding:5px 8px;border-radius:999px}.summary-next{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}.summary-next small{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}.summary-next button{width:100%;border:0;background:transparent;color:var(--text);text-align:left;padding:0}.summary-next button strong{font-size:14px;display:block}.summary-next button span{font-size:12px;color:#b9a9cf;display:block;margin-top:4px}.schedule-source-note{font-size:12px;color:var(--muted);margin:8px 2px 0}
+
+#scheduleList .item{min-height:86px}.content-schedule-row{border-color:rgba(242,185,75,.24);background:linear-gradient(180deg,rgba(242,185,75,.055),rgba(18,18,26,.98))}.content-schedule-row .iconbox{background:rgba(242,185,75,.12)}
+
+.agenda-button{width:100%;border:0;background:transparent;color:inherit;text-align:left;padding:0}.agenda-button:active{opacity:.75}
+.today-clickable{position:relative}
+
+@media (max-width:430px){.quick{grid-template-columns:repeat(3,1fr)}.quick button{min-height:88px}.quick .ic{font-size:26px}.quick small{font-size:12px}.schedule-summary .summary-card{padding:14px}}
+
+/* V8 cloud, push and invoice integration */
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:8px}.top-icon{position:relative;width:40px;height:40px;border:1px solid rgba(255,255,255,.08);border-radius:13px;background:#16121d;color:#f7f3ff;display:grid;place-items:center;font-size:17px;cursor:pointer}.top-icon:active{transform:scale(.97)}.notification-badge{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#ffca4b;color:#1a1200;font-size:10px;font-weight:900;line-height:18px;border:2px solid #0a0810}.cloud-account-card{border:1px solid rgba(255,202,75,.18);background:linear-gradient(145deg,rgba(255,202,75,.08),rgba(87,48,130,.10));border-radius:16px;padding:14px;margin:10px 0 14px}.cloud-account-card strong{display:block;color:#fff;margin-bottom:4px}.cloud-account-card small{display:block;color:#bcb6c7;line-height:1.5}.notification-settings{display:grid;gap:10px;margin:14px 0}.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#121017}.toggle-row span{display:grid;gap:3px;min-width:0}.toggle-row strong{font-size:13px}.toggle-row small{font-size:11px;color:#9c96a7;line-height:1.4}.toggle-row input[type=checkbox]{appearance:none;-webkit-appearance:none;width:44px;height:26px;border-radius:999px;background:#2b2532;position:relative;flex:0 0 auto;transition:.2s}.toggle-row input[type=checkbox]::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}.toggle-row input[type=checkbox]:checked{background:#ffca4b}.toggle-row input[type=checkbox]:checked::after{transform:translateX(18px);background:#1c1400}.invoice-host{margin-top:14px;min-height:520px;border:1px solid rgba(255,255,255,.08);border-radius:18px;overflow:hidden;background:#fff}.invoice-workspace{width:100%;height:min(78vh,980px);min-height:620px;border:0;background:#fff;display:block}.link-button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}.module-view .link-button{min-height:42px}.notification-card button{white-space:nowrap}
+@media(max-width:720px){.top-actions{gap:6px}.top-icon{width:38px;height:38px;border-radius:12px}.invoice-host{margin-left:-8px;margin-right:-8px;border-radius:14px}.invoice-workspace{height:78vh;min-height:640px}.toggle-row{padding:11px}.sheet-actions .link-button{width:100%}}
+</style>
+  <link rel="manifest" href="./manifest.webmanifest"><meta name="km-hub-build" content="v8-live"><title>Kenicmind Hub</title>
+</head>
+<body class="single-file-build" data-nav="home"><script>if("serviceWorker" in navigator&&location.protocol==="https:"){navigator.serviceWorker.register("./sw.js",{scope:"./"}).catch(console.error)}</script>
+<div class="app-shell">
+  <header class="topbar">
+    <a href="#home" class="brand" data-view="home" aria-label="Go home">
+      <div class="logo">K</div>
+      <div><strong>Kenicmind Hub</strong><small>Creative business assistant</small></div>
+    </a>
+    <div class="top-actions"><button type="button" class="top-icon" id="notificationCenterButton" aria-label="Open notifications">🔔<span id="notificationBadge" class="notification-badge" hidden>0</span></button><button type="button" class="avatar" id="profileButton" aria-label="Open profile">K</button></div>
+  </header>
+
+  <main id="mainContent">
+    <section id="home" class="view">
+      <div class="hero"><p id="greeting">Good evening,</p><h1>Kenicmind 👋</h1><p class="sub" id="todayDate"></p></div>
+      <div class="grid metrics-grid">
+        <button type="button" class="card wide clickable metric-card" data-open="money">
+          <div class="split"><div><div class="metric-title">Earned this month</div><div class="metric-value" id="incomeMetric">₦0</div></div><span class="badge green">Income</span></div>
+          <div class="money-bar"><span id="incomeProgress"></span></div>
+        </button>
+        <button type="button" class="card clickable metric-card" data-open="money"><div class="metric-title">Outstanding</div><div class="metric-value" id="outstandingMetric">₦0</div></button>
+        <a href="#jobs" data-view="jobs" class="card clickable metric-card"><div class="metric-title">Active jobs</div><div class="metric-value" id="activeMetric">0</div></a>
+        <a href="#jobs" data-view="jobs" class="card clickable metric-card"><div class="metric-title">Due today</div><div class="metric-value" id="dueMetric">0</div></a>
+        <button type="button" class="card clickable metric-card" data-open="photography"><div class="metric-title">Photo delivery</div><div class="metric-value" id="photoMetric">0</div></button>
+      </div>
+
+      <button type="button" class="primary big-action" data-action="new-job">＋ New Job</button>
+
+      <div class="section-head"><h2>Quick actions</h2></div>
+      <div class="quick">
+        <button type="button" data-action="new-job"><span class="ic">💼</span><small>New Job</small></button>
+        <button type="button" data-action="new-client"><span class="ic">👤</span><small>Client</small></button>
+        <button type="button" data-action="new-schedule"><span class="ic">📅</span><small>Schedule</small></button>
+        <button type="button" data-open="invoice"><span class="ic">🧾</span><small>Invoice</small></button>
+      </div>
+
+      <div class="section-head"><h2>Today</h2><a href="#schedule" data-view="schedule">View schedule</a></div>
+      <div class="card wide" id="todayAgenda"></div>
+
+      <div class="section-head"><h2>Next teaching session</h2></div><div id="nextTeaching"></div><div class="section-head"><h2>Daily reminders</h2></div>
+      <div class="card notification-card">
+        <div class="bell">🔔</div>
+        <div><strong>Morning agenda reminder</strong><small>Teaching, jobs, deadlines and photo deliveries.</small></div>
+        <button type="button" id="notificationButton">Enable</button>
+      </div>
+    </section>
+
+    <section id="jobs" class="view">
+      <div class="page-head"><div><span class="eyebrow">WORK</span><h1>Jobs</h1><p>Track every client job from request to delivery.</p></div><button type="button" class="mini-add" data-action="new-job">＋</button></div>
+      <div class="toolbar"><input class="search" id="jobSearch" type="search" placeholder="Search client or job..." /></div>
+      <div class="pill-row" id="jobFilters">
+        <button type="button" class="pill active" data-filter="All">All</button><button type="button" class="pill" data-filter="Waiting">Waiting</button><button type="button" class="pill" data-filter="Designing">Designing</button><button type="button" class="pill" data-filter="Client Review">Review</button><button type="button" class="pill" data-filter="Correction">Correction</button><button type="button" class="pill" data-filter="Printing">Printing</button><button type="button" class="pill" data-filter="Completed">Completed</button>
+      </div>
+      <div class="list" id="jobsList"></div>
+    </section>
+
+    <section id="schedule" class="view">
+      <div class="page-head"><div><span class="eyebrow">PLAN</span><h1>Schedule</h1><p>Teaching days, content plan, appointments, deadlines and events.</p></div><button type="button" class="mini-add" data-action="new-schedule">＋</button></div>
+      <div id="scheduleSummary" class="schedule-summary"></div>
+      <div class="card calendar-card"><div class="calendar-title"><button type="button" class="secondary" data-week="-1" aria-label="Previous week">‹</button><strong id="calendarMonth"></strong><button type="button" class="secondary" data-week="1" aria-label="Next week">›</button></div><div class="toolbar"><input class="search" type="date" id="scheduleDate" aria-label="Choose date"><button type="button" class="secondary" data-show-upcoming>Upcoming</button></div><div class="calendar-strip" id="calendarStrip"></div></div>
+      <div class="section-head"><h2 id="scheduleHeading">Upcoming</h2><button type="button" data-action="new-schedule">+ Add</button></div>
+      <div class="list" id="scheduleList"></div>
+    </section>
+
+    <section id="clients" class="view">
+      <div class="page-head"><div><span class="eyebrow">PEOPLE</span><h1>Clients</h1><p>Contacts, job history and outstanding balances.</p></div><button type="button" class="mini-add" data-action="new-client">＋</button></div>
+      <div class="toolbar"><input class="search" id="clientSearch" type="search" placeholder="Search client..." /></div>
+      <div class="list" id="clientsList"></div>
+    </section>
+
+    <section id="more" class="view">
+      <div class="page-head"><div><span class="eyebrow">TOOLS</span><h1>More</h1><p>Everything else that keeps Kenicmind moving.</p></div></div>
+      <div class="list menu-list">
+        <button type="button" class="item clickable" data-open="photography"><div class="iconbox">📸</div><div class="item-main"><strong>Photography Jobs</strong><small>Total → Selected → Edited → Delivered</small></div><div class="chev">›</div></button>
+        <button type="button" class="item clickable" data-open="money"><div class="iconbox">💰</div><div class="item-main"><strong>Income & Expenses</strong><small>Track cash flow and balances</small></div><div class="chev">›</div></button>
+        <button type="button" class="item clickable" data-open="invoice"><div class="iconbox">🧾</div><div class="item-main"><strong>Invoices & Receipts</strong><small>Create professional client documents</small></div><div class="chev">›</div></button>
+        <button type="button" class="item clickable" data-open="content"><div class="iconbox">📱</div><div class="item-main"><strong>Content Planner</strong><small>Plan posts, scripts and publishing</small></div><div class="chev">›</div></button>
+        <button type="button" class="item clickable" data-open="notifications"><div class="iconbox">🔔</div><div class="item-main"><strong>Notification Centre</strong><small>Morning agenda, jobs, content and payment reminders</small></div><div class="chev">›</div></button>
+        <button type="button" class="item clickable" data-open="tools"><div class="iconbox">🛠️</div><div class="item-main"><strong>Quick Tools</strong><small>Resize, compress, QR, WhatsApp and print sizes</small></div><div class="chev">›</div></button>
+      </div>
+      <p class="foot-note">Kenicmind Hub V8 · Local-first with Kenicmind cloud sync and background reminders.</p>
+    </section>
+    <section id="module" class="view module-view" aria-live="polite">
+      <button type="button" class="back-link" data-module-back>← Back to More</button>
+      <div class="page-head module-head"><div><span class="eyebrow" id="moduleEyebrow">MORE</span><h1 id="modulePageTitle">Tools</h1><p id="modulePageDescription"></p></div></div>
+      <div id="modulePageBody"></div>
+    </section>
+  </main>
+
+  <button type="button" class="fab" hidden id="fab" aria-label="Add new">＋</button>
+  <nav class="nav" aria-label="Main navigation">
+    <a data-view="home" href="#home"><span class="nav-ic">⌂</span>Home</a>
+    <a data-view="jobs" href="#jobs"><span class="nav-ic">▣</span>Jobs</a>
+    <a data-view="schedule" href="#schedule"><span class="nav-ic">◫</span>Schedule</a>
+    <a data-view="clients" href="#clients"><span class="nav-ic">♙</span>Clients</a>
+    <a data-view="more" href="#more"><span class="nav-ic">•••</span>More</a>
+  </nav>
+</div>
+
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="grab"></div>
+    <button type="button" class="close-x" id="closeModal" aria-label="Close">×</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div class="toast" role="status" aria-live="polite" id="toast"></div>
+
+<script>//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
